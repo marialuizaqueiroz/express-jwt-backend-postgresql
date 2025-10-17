@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as userService from '../services/user.service';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import config from '../config';
 import logger from '../utils/logger';
 
@@ -33,7 +33,14 @@ export const login = async (req: Request, res: Response) => {
     const match = await userService.comparePassword(password, (user as any).password);
     if (!match) return res.status(401).json({ message: 'Senha inválida' });
 
-    const token = jwt.sign({ sub: user._id, email: user.email }, config.jwtSecret, { expiresIn: config.jwtExpiresIn });
+    const secret: jwt.Secret = config.jwtSecret as jwt.Secret;
+    const signOptions: jwt.SignOptions = { expiresIn: config.jwtExpiresIn as any };
+
+    const token = jwt.sign(
+      { sub: (user as any)._id, email: (user as any).email },
+      secret,
+      signOptions
+    );
     logger.info('User logged in', email);
     return res.json({ token });
   } catch (err: any) {
