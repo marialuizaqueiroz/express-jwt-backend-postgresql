@@ -11,7 +11,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     return res.status(401).json({ message: 'Token não fornecido' });
   }
 
-  const token = authHeader.split(' ')[1]; // Formato "Bearer TOKEN"
+  const token = authHeader.split(' ')[1]; 
 
   if (!token) {
     logger.warn('Token in invalid format');
@@ -22,10 +22,10 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
     const secret = config.jwtSecret as jwt.Secret;
     const decoded = jwt.verify(token, secret);
     
-    // Anexa o payload do token (que contém o ID do usuário) ao request
+    
     req.user = decoded; 
 
-    next(); // Continua para o controller
+    next(); 
   } catch (error) {
     logger.error('Invalid auth token', error);
     return res.status(401).json({ message: 'Token inválido' });

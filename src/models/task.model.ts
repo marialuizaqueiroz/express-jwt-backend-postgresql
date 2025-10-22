@@ -2,9 +2,9 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface ITask extends Document {
   title: string;
-  description?: string; // O '?' torna o campo opcional
+  description?: string; 
   completed: boolean;
-  user: Schema.Types.ObjectId; // Referência ao dono da tarefa
+  user: Schema.Types.ObjectId; 
 }
 
 const taskSchema = new Schema<ITask>({
@@ -24,11 +24,11 @@ const taskSchema = new Schema<ITask>({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'User', // Referencia ao modelo 'User' que você já tem
+    ref: 'User', 
     required: true,
   }
 }, {
-  timestamps: true // Adiciona createdAt e updatedAt automaticamente
+  timestamps: true 
 });
 
 export const TaskModel = model<ITask>('Task', taskSchema);

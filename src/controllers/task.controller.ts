@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import * as taskService from '../services/task.service';
 import logger from '../utils/logger';
 
-// Interface para extrair o ID do usuário do payload do JWT
+
 interface UserPayload {
-  sub: string; // 'sub' (subject) é onde guardamos o ID no login
+  sub: string; 
   email: string;
 }
 
@@ -12,8 +12,7 @@ interface UserPayload {
 export const createTask = async (req: Request, res: Response) => {
   try {
     const { title, description } = req.body;
-    const userId = (req.user as UserPayload).sub; // Pega o ID do usuário do middleware
-
+    const userId = (req.user as UserPayload).sub; 
     if (!title) {
       return res.status(422).json({ message: 'O título é obrigatório' });
     }
@@ -27,11 +26,11 @@ export const createTask = async (req: Request, res: Response) => {
   }
 };
 
-// GET /api/tasks (e com filtros: ?completed=true, etc)
+// GET /api/tasks 
 export const getAllTasks = async (req: Request, res: Response) => {
   try {
     const userId = (req.user as UserPayload).sub;
-    const filters = req.query; // Pega filtros como ?completed=true
+    const filters = req.query; 
 
     const tasks = await taskService.findTasks(userId, filters);
     logger.info(`User ${userId} fetched all tasks`);
@@ -51,7 +50,7 @@ export const getTaskById = async (req: Request, res: Response) => {
     const task = await taskService.findTaskById(taskId, userId);
 
     if (!task) {
-      // Se não encontrou, pode ser porque não existe OU não pertence ao usuário
+      
       logger.warn(`Task not found or unauthorized: ${taskId} for user: ${userId}`);
       return res.status(404).json({ message: 'Tarefa não encontrada' });
     }
@@ -64,19 +63,19 @@ export const getTaskById = async (req: Request, res: Response) => {
   }
 };
 
-// PUT /api/tasks/:id (Atualização completa)
+// PUT /api/tasks/:id 
 export const updateTaskPut = async (req: Request, res: Response) => {
   try {
     const userId = (req.user as UserPayload).sub;
     const taskId = req.params.id;
     const { title, description, completed } = req.body;
 
-    // PUT exige que todos os campos principais sejam enviados
+    
     if (title === undefined || description === undefined || completed === undefined) {
       return res.status(422).json({ message: 'Requisição incompleta. PUT deve enviar title, description e completed.' });
     }
 
-    const updatedTask = await taskService.updateTask(taskId, userId, { title, description, completed }, true); // true = overwrite
+    const updatedTask = await taskService.updateTask(taskId, userId, { title, description, completed }, true); 
 
     if (!updatedTask) {
       return res.status(404).json({ message: 'Tarefa não encontrada' });
@@ -90,14 +89,14 @@ export const updateTaskPut = async (req: Request, res: Response) => {
   }
 };
 
-// PATCH /api/tasks/:id (Atualização parcial)
+// PATCH /api/tasks/:id 
 export const updateTaskPatch = async (req: Request, res: Response) => {
   try {
     const userId = (req.user as UserPayload).sub;
     const taskId = req.params.id;
-    const update = req.body; // Pega qualquer campo enviado (title, description ou completed)
+    const update = req.body; 
 
-    const updatedTask = await taskService.updateTask(taskId, userId, update, false); // false = no overwrite
+    const updatedTask = await taskService.updateTask(taskId, userId, update, false); 
 
     if (!updatedTask) {
       return res.status(404).json({ message: 'Tarefa não encontrada' });
@@ -124,7 +123,7 @@ export const deleteTask = async (req: Request, res: Response) => {
     }
 
     logger.info(`Task deleted: ${taskId} by user: ${userId}`);
-    return res.status(204).send(); // 204 = No Content (sucesso, mas sem corpo de resposta)
+    return res.status(204).send(); 
   } catch (err: any) {
     logger.error('Error deleting task', err);
     return res.status(500).json({ message: 'Erro interno' });

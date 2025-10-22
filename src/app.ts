@@ -3,22 +3,21 @@ import config from "./config";
 import { connectDB } from "./database";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import authRouter from "./routes/auth.router";
-import taskRoutes from "./routes/task.router"; // 1. IMPORTE AS NOVAS ROTAS
+import taskRoutes from "./routes/task.router"; 
 import logger from "./utils/logger";
 
 const app = express();
 app.use(express.json());
 
-// Suas rotas
 app.use("/api", authRouter);
-app.use("/api/tasks", taskRoutes); // 2. ADICIONE A NOVA ROTA AQUI
+app.use("/api/tasks", taskRoutes); 
 
 app.use(errorMiddleware);
 try {
   logger.info("🔍 Tentando conectar ao MongoDB...");
   connectDB({
-    serverSelectionTimeoutMS: 30000, // espera até 30s para o cluster responder
-    socketTimeoutMS: 45000, // previne desconexões rápidas
+    serverSelectionTimeoutMS: 30000, 
+    socketTimeoutMS: 45000, 
   });
   logger.info("✅ Conexão com MongoDB estabelecida!");
 
@@ -27,5 +26,5 @@ try {
   );
 } catch (error: any) {
   logger.error("❌ Falha ao conectar ao MongoDB:", error.message || error);
-  process.exit(1); // encerra o app se não conectar
+  process.exit(1); 
 }
