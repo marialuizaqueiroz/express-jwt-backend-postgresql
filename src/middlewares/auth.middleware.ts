@@ -1,21 +1,33 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../config';
+import logger from '../utils/logger';
 
-export interface AuthRequest extends Request {
-  user?: any;
-}
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers.authorization;
 
-export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const auth = req.headers.authorization;
-  if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ message: 'Token não informado' });
+  if (!authHeader) {
+    logger.warn('Auth token not provided');
+    return res.status(401).json({ message: 'Token não fornecido' });
+  }
 
-  const token = auth.split(' ')[1];
+  const token = authHeader.split(' ')[1]; // Formato "Bearer TOKEN"
+
+  if (!token) {
+    logger.warn('Token in invalid format');
+    return res.status(401).json({ message: 'Token em formato inválido' });
+  }
+
   try {
-    const payload = jwt.verify(token, config.jwtSecret);
-    req.user = payload;
-    return next();
-  } catch (err) {
+    const secret = config.jwtSecret as jwt.Secret;
+    const decoded = jwt.verify(token, secret);
+    
+    // Anexa o payload do token (que contém o ID do usuário) ao request
+    req.user = decoded; 
+
+    next(); // Continua para o controller
+  } catch (error) {
+    logger.error('Invalid auth token', error);
     return res.status(401).json({ message: 'Token inválido' });
   }
 };
