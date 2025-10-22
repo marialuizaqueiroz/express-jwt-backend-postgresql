@@ -13,31 +13,28 @@
 // };
 
 
-// Em src/database.ts ou src/database/index.ts
+/// Em src/database.ts
 import mongoose from 'mongoose';
 import config from '../config';
-// Não precisamos mais do logger aqui, vamos usar o console
-// import logger from '../utils/logger';
 
-export const connectDB = async () => {
-  try {
-    // VAI APARECER NOS LOGS
-    console.log('[INFO] Attempting MongoDB connection...');
-    
-    const options = {
-      bufferCommands: false, 
-    };
+export const connectDB = () => {
+  // Isto não é mais uma função async, ela retorna uma Promessa
+  console.log('[INFO] Attempting MongoDB connection...');
 
-    await mongoose.connect(config.mongoUri, options);
+  const options = {
+    bufferCommands: false, // Mantém o buffering desligado
+  };
 
-    // VAI APARECER NOS LOGS
-    console.log('[INFO] MongoDB connected');
-
-  } catch (error) {
-    // VAI APARECER NOS LOGS
-    console.error('!!!!!!!!!! FATAL MONGODB CONNECTION ERROR !!!!!!!!!!!');
-    console.error(error); // Imprime o erro REAL (ex: AuthenticationFailed)
-    
-    process.exit(1); 
-  }
+  // Retornamos a promessa do mongoose.connect
+  return mongoose.connect(config.mongoUri, options)
+    .then(() => {
+      console.log('[INFO] MongoDB connected');
+    })
+    .catch((error) => {
+      // Se falhar, imprimimos o erro e rejeitamos a promessa,
+      // o que fará o .catch() no server.ts ser ativado.
+      console.error('!!!!!!!!!! FATAL MONGODB CONNECTION ERROR !!!!!!!!!!!');
+      console.error(error); // Imprime o erro REAL (ex: AuthenticationFailed)
+      return Promise.reject(error); // Rejeita a promessa
+    });
 };
