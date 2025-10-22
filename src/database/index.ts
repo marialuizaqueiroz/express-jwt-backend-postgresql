@@ -4,10 +4,20 @@ import logger from '../utils/logger';
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(config.mongoUri);
+    logger.info('Attempting MongoDB connection...');
+    
+    const options = {
+      bufferCommands: false,
+    };
+
+    await mongoose.connect(config.mongoUri, options);
+
     logger.info('MongoDB connected');
-  } catch (error: any) {
-    logger.error('MongoDB connection error', error.message || error);
-    process.exit(1);
+
+  } catch (error) {
+    logger.error('!!!!!!!!!! FATAL MONGODB CONNECTION ERROR !!!!!!!!!!!');
+    logger.error(error); 
+    
+    process.exit(1); 
   }
 };
