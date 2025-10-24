@@ -1,0 +1,36 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") 
+}
+
+// Modelo de Usuário (substitui o user.model.ts)
+model User {
+  id        String   @id @default(cuid()) 
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // A Relação: Um Usuário tem MUITAS Tarefas
+  tasks     Task[]
+}
+
+// Modelo de Tarefa (substitui o task.model.ts)
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String? // O '?' significa que é opcional
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // A Relação: Esta Tarefa pertence a UM Usuário
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   // Esta é a "chave estrangeira" (guarda o ID do usuário)
+}

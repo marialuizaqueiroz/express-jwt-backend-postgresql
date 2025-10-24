@@ -1,24 +1,17 @@
-import { UserModel } from '../models/user.model';
-import bcrypt from 'bcrypt';
+import { User } from '@prisma/client'; 
+import { prisma } from '../lib/prisma'; 
 
-const SALT_ROUNDS = 10;
 
-export const createUser = async (name: string, email: string, password: string) => {
-  const existing = await UserModel.findOne({ email });
-  if (existing) throw { status: 422, message: 'E-mail já cadastrado' };
+type CreateUserInput = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
 
-  const hash = await bcrypt.hash(password, SALT_ROUNDS);
-  const user = new UserModel({ name, email, password: hash });
-  await user.save();
-  return user;
+export const createUser = async (input: CreateUserInput) => {
+  return prisma.user.create({
+    data: input,
+  });
 };
 
-export const findUserByEmail = async (email: string, includePassword = false) => {
-  return includePassword
-    ? UserModel.findOne({ email }).select('+password')
-    : UserModel.findOne({ email });
-};
-
-export const comparePassword = async (plain: string, hash: string) => {
-  return bcrypt.compare(plain, hash);
+export const findUserByEmail = async (email: string) => {
+  return prisma.user.findUnique({
+    where: { email },
+  });
 };

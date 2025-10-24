@@ -1,15 +1,18 @@
-import mongoose from 'mongoose';
-import config from '../config';
-import logger from '../utils/logger';
+// Em src/database.ts
+import { prisma } from '../lib/prisma';
+//import prisma from './lib/prisma';
 
-export const connectDB = async (options = {}) => {
-  try {
-    await mongoose.connect(config.mongoUri, {
-      ...options,
+
+export const connectDB = () => {
+  console.log('[INFO] Attempting PostgreSQL connection...');
+
+  return prisma.$connect()
+    .then(() => {
+      console.log('[INFO] PostgreSQL connected');
+    })
+    .catch((error: Error) => {     
+      console.error('!!!!!!!!!! FATAL POSTGRESQL CONNECTION ERROR !!!!!!!!!!!');
+      console.error(error);
+      return Promise.reject(error);
     });
-  } catch (error: any) {
-    logger.error('Erro de conexão com MongoDB:', error.message || error);
-    throw error; 
-  }
 };
-

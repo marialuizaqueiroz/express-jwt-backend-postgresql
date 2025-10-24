@@ -1,43 +1,72 @@
-import { TaskModel, ITask } from '../models/task.model';
-import { FilterQuery } from 'mongoose';
+import { prisma } from '../lib/prisma';
 
-// Criar uma nova tarefa
-export const createTask = async (input: Partial<ITask>, userId: string): Promise<ITask> => {
-  const taskData = { ...input, user: userId };
-  const task = await TaskModel.create(taskData);
-  return task;
+type TaskCreateInput = {
+  title: string;
+  description?: string;
+}
+
+type TaskUpdateInput = {
+  title?: string;
+  description?: string;
+  completed?: boolean;
+}
+
+
+export const createTask = async (input: TaskCreateInput, userId: string) => {
+  return prisma.task.create({
+    data: {
+      title: input.title,
+      description: input.description,
+      userId: userId, 
+    },
+  });
 };
 
-// Listar/Filtrar tarefas DE UM USUÁRIO
-export const findTasks = async (userId: string, query: FilterQuery<ITask>): Promise<ITask[]> => {
-  const tasks = await TaskModel.find({ user: userId, ...query });
-  return tasks;
+export const findTasks = async (userId: string, query: { completed?: string }) => {
+  const completed = query.completed ? query.completed === 'true' : undefined;
+
+  return prisma.task.findMany({
+    where: {
+      userId: userId, 
+      completed: completed, 
+    },
+  });
 };
 
-// Buscar uma tarefa específica DE UM USUÁRIO
-export const findTaskById = async (taskId: string, userId: string): Promise<ITask | null> => {
-  const task = await TaskModel.findOne({ _id: taskId, user: userId });
-  return task;
+export const findTaskById = async (id: string, userId: string) => {
+  return prisma.task.findFirst({
+    where: {
+      id: id,
+      userId: userId, 
+    },
+  });
 };
 
-// Atualizar uma tarefa DE UM USUÁRIO
-export const updateTask = async (taskId: string, userId: string, update: Partial<ITask>, overwrite = false): Promise<ITask | null> => {
-  // CORREÇÃO: Adicionamos 'includeResultMetadata: false'
-  const options = { new: true, overwrite, includeResultMetadata: false };
-  
-  const task = await TaskModel.findOneAndUpdate(
-    { _id: taskId, user: userId },
-    update,
-    options
-  );
-  return task;
+export const updateTask = async (id: string, userId: string, input: TaskUpdateInput) => {
+
+  const { count } = await prisma.task.updateMany({
+    where: {
+      id: id,
+      userId: userId, 
+    },
+    data: input,
+  });
+
+  if (count === 0) {
+    return null;
+  }
+
+  return prisma.task.findUnique({ where: { id: id } });
 };
 
-// Deletar uma tarefa DE UM USUÁRIO
-export const deleteTask = async (taskId: string, userId: string): Promise<ITask | null> => {
-  const task = await TaskModel.findOneAndDelete(
-    { _id: taskId, user: userId },
-    { includeResultMetadata: false }
-  );
-  return task;
+export const deleteTask = async (id: string, userId: string) => {
+
+  const { count } = await prisma.task.deleteMany({
+    where: {
+      id: id,
+      userId: userId, 
+    },
+  });
+
+  return count > 0; 
 };
