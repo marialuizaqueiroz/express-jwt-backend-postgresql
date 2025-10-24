@@ -5,12 +5,20 @@ import logger from '../utils/logger';
 export const createTask = async (req: Request, res: Response) => {
   try {
     const userId = req.user.sub as string;
+    
+    // --- MELHORIA: ADICIONAR VALIDAÇÃO ---
+    const { title } = req.body;
+    if (!title) {
+      return res.status(422).json({ message: "O campo 'title' é obrigatório" });
+    }
+    // --- FIM DA MELHORIA ---
+
     if (!userId) {
       return res.status(401).json({ message: 'Usuário não autenticado' });
     }
-
+    
     const task = await taskService.createTask(req.body, userId);
-
+    
     return res.status(201).json(task);
   } catch (error: any) {
     logger.error(error.message);

@@ -14,17 +14,14 @@ app.use("/api/tasks", taskRoutes);
 
 app.use(errorMiddleware);
 try {
-  logger.info("🔍 Tentando conectar ao MongoDB...");
-  connectDB({
-    serverSelectionTimeoutMS: 30000, 
-    socketTimeoutMS: 45000, 
-  });
-  logger.info("✅ Conexão com MongoDB estabelecida!");
+  logger.info("🔍 Tentando conectar ao POSTGRESQL...");
+  connectDB();
+  logger.info("✅ Conexão com POSTGRESQL estabelecida!");
 
   app.listen(config.port, () =>
     logger.info(`🚀 Servidor rodando na porta ${config.port}`)
   );
 } catch (error: any) {
-  logger.error("❌ Falha ao conectar ao MongoDB:", error.message || error);
+  logger.error("❌ Falha ao conectar ao POSTGRESQL:", error.message || error);
   process.exit(1); 
 }

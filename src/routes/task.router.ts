@@ -11,18 +11,18 @@ router.use(authMiddleware);
 router.post('/', taskController.createTask);
 
 // GET /api/tasks
-router.get('/', taskController.getAllTasks);
+router.get('/', taskController.getTasks);
 
 // GET /api/tasks/:id
 router.get('/:id', taskController.getTaskById);
 
 // PUT /api/tasks/:id
-router.put('/:id', taskController.updateTaskPut);
+router.put('/:id', taskController.updateTaskById);
 
 // PATCH /api/tasks/:id
-router.patch('/:id', taskController.updateTaskPatch);
+router.patch('/:id', taskController.updateTaskById);
 
 // DELETE /api/tasks/:id
-router.delete('/:id', taskController.deleteTask);
+router.delete('/:id', taskController.deleteTaskById);
 
 export default router;

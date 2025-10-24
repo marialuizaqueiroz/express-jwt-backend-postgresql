@@ -1,32 +1,25 @@
+// Em src/config/index.ts
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Validação explícita das variáveis de ambiente críticas
+// Validação explícita
 if (!process.env.JWT_SECRET) {
   throw new Error('ERRO FATAL: A variável de ambiente JWT_SECRET não está definida.');
 }
-
-if (!process.env.MONGO_URI) {
-  throw new Error('ERRO FATAL: A variável de ambiente MONGO_URI não está definida.');
+if (!process.env.DATABASE_URL) {
+  throw new Error('ERRO FATAL: A variável de ambiente DATABASE_URL não está definida.');
 }
 
 interface IConfig {
   port: number;
-  mongoUri: string;
   jwtSecret: string;
-  jwtExpiresIn: string;
+  jwtExpiresIn: string | number; // <--- 1. CORREÇÃO AQUI
 }
 
 const config: IConfig = {
   port: process.env.PORT ? Number(process.env.PORT) : 4000,
-
-  // Agora temos certeza que a variável existe (validação acima)
-  mongoUri: process.env.MONGO_URI as string,
-
-  // Asserções para garantir que o tipo exportado é string
-  jwtSecret: process.env.JWT_SECRET as string,
-
-  jwtExpiresIn: (process.env.JWT_EXPIRES_IN || '1h') as string
+  jwtSecret: (process.env.JWT_SECRET || '') as string,
+  jwtExpiresIn: (process.env.JWT_EXPIRES_IN || '1h') // <--- 2. CORREÇÃO AQUI (removido o 'as string')
 };
 
 export default config;
