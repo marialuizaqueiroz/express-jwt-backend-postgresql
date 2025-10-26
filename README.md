@@ -15,7 +15,7 @@ A API está hospedada na Vercel e pode ser acessada através da seguinte URL bas
 
 Um vídeo curto demonstrando os testes locais, em produção e o teste de segurança pode ser encontrado no link abaixo:
 
-**[([https://www.youtube.com/watch?v=ge0LUZXnZYA](https://www.youtube.com/watch?v=reBlgw8O-tU))]**
+**[(https://www.youtube.com/watch?v=reBlgw8O-tU)](https://www.youtube.com/watch?v=reBlgw8O-tU))]**
 
 ---
 
