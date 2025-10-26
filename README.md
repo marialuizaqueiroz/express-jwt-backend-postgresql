@@ -9,7 +9,7 @@
 
 A API está hospedada na Vercel e pode ser acessada através da seguinte URL base:
 
-**[(https://express-jwt-backend-postgresql.marialuiza.me/)][(https://express-jwt-backend-postgresql.marialuiza.me/)]**
+**[(https://express-jwt-backend-postgresql.marialuiza.me/)]**
 
 ## Vídeo de Demonstração
 
