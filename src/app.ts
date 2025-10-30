@@ -1,4 +1,5 @@
 import express from "express";
+import cors from 'cors';
 import config from "./config";
 import { connectDB } from "./database";
 import { errorMiddleware } from "./middlewares/error.middleware";
@@ -7,6 +8,7 @@ import taskRoutes from "./routes/task.router";
 import logger from "./utils/logger";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use("/api", authRouter);

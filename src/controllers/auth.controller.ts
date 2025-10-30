@@ -76,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign( 
       { sub: user.id, email: user.email },
       secret,
-      { expiresIn: config.jwtExpiresIn as any } // <-- CORREÇÃO AQUI
+      { expiresIn: '1h' } 
     );
 
     logger.info('User logged in', email);
