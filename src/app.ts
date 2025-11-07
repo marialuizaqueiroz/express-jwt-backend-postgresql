@@ -29,5 +29,5 @@ try {
   );
 } catch (error: any) {
   logger.error("❌ Falha ao conectar ao POSTGRESQL:", error.message || error);
-  process.exit(1); 
+  // process.exit(1); 
 }
