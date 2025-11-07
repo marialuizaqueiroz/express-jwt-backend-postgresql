@@ -15,7 +15,7 @@ const options: swaggerJSDoc.Options = {
     servers: [
       { url: 'http://localhost:4000', description: 'Servidor Local' },
       {
-        url: 'https://express-jwt-backend-postgresql.marialuiza.me',
+        url: 'https://express-jwt-backend-postgresql.vercel.app',
         description: 'Servidor Produção (Vercel)',
       },
     ],

@@ -2,17 +2,21 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/app.ts",
+      "src": "package.json",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["node_modules/swagger-ui-dist/**"]
+        "includeFiles": [
+          "dist/**",
+          "node_modules/swagger-ui-dist/**",
+          "prisma/schema.prisma" 
+        ]
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/app.ts"
+      "dest": "dist/app.js"
     }
   ]
 }
