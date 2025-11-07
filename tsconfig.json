@@ -6,7 +6,9 @@
     "rootDir": "src",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "removeComments": false,
+    "skipLibCheck": true,
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
   "exclude": ["node_modules", "dist", "prisma.config.ts"]
 }

@@ -6,6 +6,8 @@ import { errorMiddleware } from "./middlewares/error.middleware";
 import authRouter from "./routes/auth.router";
 import taskRoutes from "./routes/task.router"; 
 import logger from "./utils/logger";
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger.config';
 
 const app = express();
 app.use(cors());
@@ -13,6 +15,8 @@ app.use(express.json());
 
 app.use("/api", authRouter);
 app.use("/api/tasks", taskRoutes); 
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorMiddleware);
 try {

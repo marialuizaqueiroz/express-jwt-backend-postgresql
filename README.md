@@ -9,13 +9,13 @@
 
 A API está hospedada na Vercel e pode ser acessada através da seguinte URL base:
 
-**[(https://express-jwt-backend-postgresql.marialuiza.me/)]**
+**[https://express-jwt-backend-postgresql.marialuiza.me/](https://express-jwt-backend-postgresql.marialuiza.me/)**
 
 ## Vídeo de Demonstração
 
 Um vídeo curto demonstrando os testes locais, em produção e o teste de segurança pode ser encontrado no link abaixo:
 
-**[(https://www.youtube.com/watch?v=reBlgw8O-tU)]**
+**[(https://www.youtube.com/watch?v=reBlgw8O-tU)](https://www.youtube.com/watch?v=reBlgw8O-tU)**
 
 ---
 
@@ -49,7 +49,7 @@ O ponto principal da implementação é a **segurança e o isolamento de dados (
 
 * **Backend:** Node.js, Express.js
 * **Linguagem:** TypeScript
-* **Banco de Dados:** Postgresql (com Prisma)
+* **Banco de Dados:** MongoDB (com Mongoose)
 * **Autenticação:** JSON Web Tokens (JWT)
 * **Segurança:** Bcrypt.js (para hashing de senhas)
 * **Hospedagem:** Vercel
